@@ -6,6 +6,7 @@ class Book:
     self.isbn = ''
     self.image = ''
     self.rating = ''
+    self.subTitle = ''
     self.originTitle = ''
     self.publishYear = ''
     self.pages = ''

@@ -1,16 +1,53 @@
 import bs4
-import request_url as ru
+import base
+import write2file as wf
 from douban_book import Book
+
+'''
+从豆列解析所有图书的信息并写到文档
+'''
+def requestDoulieBooks(url):
+  soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')
+  tag = ''
+  try:
+    tag = soup.select_one('#content > h1 > span').text.split('|')[1].strip().split()[0].strip()
+    if tag == '其它':
+      tag = '' # 忽略它
+  except:
+    pass
+
+  items = soup.select('.doulist-item')
+  if items:
+    for item in items:
+      title = item.select_one('.title')
+      if title:
+        title = title.select_one('a')
+        if title:
+          bookUrl = title.get('href')
+          book = requestBook(bookUrl)
+          wf.write2Md(base.fileSavePath, book, tag)
+    getNextPage(soup)
+    
+'''获取豆列下一页'''
+def getNextPage(soup):
+  paginator = soup.select_one('.paginator')
+  if paginator:
+    next = paginator.select_one('.next')
+    if next:
+      nextUrl = next.select_one('a')
+      if nextUrl:
+        nextPage = nextUrl.get('href')
+        if nextPage:
+          requestDoulieBooks(nextPage)
+
 
 '''
 解析一本图书的信息，比如 
 book = requestBook('https://book.douban.com/subject/34834004/')
 '''
-
-# 解析一本书
 def requestBook(url):
   book = Book(url)
-  soup = bs4.BeautifulSoup(ru.requestUrl(url), 'html.parser')
+  soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')
 
   title = getContent(soup, 'meta[property="og:title"]')
   if title:
@@ -38,6 +75,10 @@ def requestBook(url):
   
   for pl in soup.select('.pl'):
     text = pl.text.strip()
+    if '副标题' in text:
+      subTitle = str(pl.next_sibling).strip()
+      if subTitle:
+        book.subTitle = subTitle
     if '原作名' in text:
       originTitle = str(pl.next_sibling).strip()
       if originTitle:
