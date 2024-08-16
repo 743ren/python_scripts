@@ -45,8 +45,8 @@ def write2Md(path: Path, book: Book, tag = ''):
     f.write(f'状态: []\n')
     # f.write(f'来源: \n') EPUB 网络路径或者直接文件地址
 
-    language = getLanguage(book)
-    if language:
+    # language = getLanguage(book)
+    if language := getLanguage(book):
       f.write(f'语言: [{language}]\n')
 
     f.write('---\n\n')
@@ -62,7 +62,7 @@ def write2Md(path: Path, book: Book, tag = ''):
 def getFinalPath(path: Path, book: Book):
   global rememberCmd
   mdPath = path/f'{book.title}.md'
-  if mdPath.exists:
+  if mdPath.exists():
     if rememberCmd:
       cmd = rememberCmd
     else:
