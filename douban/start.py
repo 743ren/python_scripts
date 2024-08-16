@@ -10,4 +10,4 @@ while True:
     db.requestDoulieBooks(doulie.strip())
 
 # book = db.requestBook('https://book.douban.com/subject/36331624/')
-# wf.write2Md(base.path, book)
+# wf.write2Md(base.fileSavePath, book)

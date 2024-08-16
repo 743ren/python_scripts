@@ -3,9 +3,9 @@ import base
 import write2file as wf
 from douban_book import Book
 
-'''
+"""
 从豆列解析所有图书的信息并写到文档
-'''
+"""
 def requestDoulieBooks(url):
   soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')
   tag = ''
@@ -28,7 +28,7 @@ def requestDoulieBooks(url):
           wf.write2Md(base.fileSavePath, book, tag)
     getNextPage(soup)
     
-'''获取豆列下一页'''
+"""获取豆列下一页"""
 def getNextPage(soup):
   paginator = soup.select_one('.paginator')
   if paginator:
@@ -41,10 +41,10 @@ def getNextPage(soup):
           requestDoulieBooks(nextPage)
 
 
-'''
+"""
 解析一本图书的信息，比如 
 book = requestBook('https://book.douban.com/subject/34834004/')
-'''
+"""
 def requestBook(url):
   book = Book(url)
   soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')

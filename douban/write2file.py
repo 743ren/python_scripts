@@ -2,10 +2,11 @@ from pathlib import Path
 from douban_book import Book
 from langdetect import detect
 import datetime
+import re
 
-'''
+"""
 将书籍信息写入 markdown 文件，大部分作为 obsidian 用的文档属性
-'''
+"""
 
 rememberCmd = ''
 
@@ -35,7 +36,6 @@ def write2Md(path: Path, book: Book, tag = ''):
       f.write(f'页数: {book.pages}\n')
     if book.publishYear:
       f.write(f'出版年: {book.publishYear}\n')
-    f.write(f'成书年: \n')
 
     if tag:
       f.write(f'tags: [{tag}]\n')
@@ -62,7 +62,6 @@ def write2Md(path: Path, book: Book, tag = ''):
 def getFinalPath(path: Path, book: Book):
   global rememberCmd
   mdPath = path/f'{book.title}.md'
-  print('xxxxxx ' + str(rememberCmd))
   if mdPath.exists:
     if rememberCmd:
       cmd = rememberCmd
@@ -79,23 +78,32 @@ def getFinalPath(path: Path, book: Book):
       rememberCmd = cmd
   return mdPath
 
-'''
+"""
 外文翻译的书，但是许多是翻译的英文，可能最初并不是英文的，还有些是外语的，但是没有原著名字
-'''
+"""
 def getLanguage(book: Book):
   language = ''
   if book.originTitle:
     lan = detect(book.originTitle)
-    if lan == 'en':
+    language = {
+      'en': '英语', 
+		  'fr': '法语', 
+		  'de': '德语', 
+		  'ru': '俄语',
+      'ja': '日语',
+      'ko': '韩语'
+    }.get(lan, '')
+  else:
+    if re.search(r'\[美\]|\[英\]', book.author):
       language = '英语'
-    elif lan == 'fr':
+    elif re.search(r'\[法\]', book.author):
       language = '法语'
-    elif lan == 'de':
+    elif re.search(r'\[德\]', book.author):
       language = '德语'
-    elif lan == 'ru':
+    elif re.search(r'\[俄\]', book.author):
       language = '俄语'
-    elif lan == 'ja':
+    elif re.search(r'\[日\]', book.author):
       language = '日语'
-    elif lan == 'ko':
+    elif re.search(r'\[韩\]', book.author):
       language = '韩语'
   return language  
