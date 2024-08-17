@@ -5,7 +5,9 @@ from time import sleep
 import pyperclip
 
 fileSavePath = Path.home()/'Documents/Write/Obsidian/图书馆'
+exclude_tags = ['其它', '政法', '社科']
 
+# 热键都是 mac 系统的
 def requestUrl(url):
   webbrowser.open(url) # 浏览器打开网页
   sleep(5) # 等待网页加载

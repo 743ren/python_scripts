@@ -10,17 +10,21 @@ counter = 0
 """
 def requestDoulieBooks(url):
   global counter
-  counter = 0
 
   soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')
+
+  # 全局的tag不知怎么后来就 None了
   tag = ''
   try:
-    tag = soup.select_one('#content > h1 > span').text.split('｜')[1].strip().split()[0].strip()
-    if tag == '其它':
-      tag = '' # 忽略它
+    tag = soup.select_one('#content > h1 > span').text
+    if tag not in base.exclude_tags:
+      if '｜' in tag:
+        tag = tag.split('｜')[1].strip().split()[0].strip()
+      elif '|' in tag: 
+        tag = tag.split('|')[1].strip().split()[0].strip()
   except:
     pass
-
+  
   items = soup.select('.doulist-item')
   if items:
     for item in items:
@@ -30,16 +34,17 @@ def requestDoulieBooks(url):
         if title:
           bookUrl = title.get('href')
           book = requestBook(bookUrl)
-
           counter += 1
           print(f'---{counter}---')
           print(f'《{book.title}》获取成功')
           wf.write2Md(base.fileSavePath, book, tag)
           print(f'《{book.title}》写入文件成功')
     getNextPage(soup)
+
     
 """获取豆列下一页"""
 def getNextPage(soup):
+  nextPage = ''
   paginator = soup.select_one('.paginator')
   if paginator:
     next = paginator.select_one('.next')
@@ -47,8 +52,11 @@ def getNextPage(soup):
       nextUrl = next.select_one('a')
       if nextUrl:
         nextPage = nextUrl.get('href')
-        if nextPage:
-          requestDoulieBooks(nextPage)
+  if nextPage:
+    requestDoulieBooks(nextPage)
+  else:
+    global counter
+    counter = 0
 
 
 """
