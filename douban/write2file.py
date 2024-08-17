@@ -8,7 +8,7 @@ import re
 将书籍信息写入 markdown 文件，大部分作为 obsidian 用的文档属性
 """
 
-rememberCmd = ''
+# rememberCmd = ''
 
 def write2Md(path: Path, book: Book, tag = ''):
 
@@ -60,22 +60,22 @@ def write2Md(path: Path, book: Book, tag = ''):
     print(f'{book.title} 写到 markdown 文件成功')
 
 def getFinalPath(path: Path, book: Book):
-  global rememberCmd
+  # global rememberCmd
   mdPath = path/f'{book.title}.md'
   if mdPath.exists():
-    if rememberCmd:
-      cmd = rememberCmd
-    else:
-      cmd = input('存在同名文件如何处理？(a: 覆盖, b: 跳过, c: 改名，命令后面加 r 表示记住):')
+    # if rememberCmd:
+    #   cmd = rememberCmd
+    # else:
+    #   cmd = input('存在同名文件如何处理？(a: 覆盖, b: 跳过, c: 改名，命令后面加 r 表示记住):')
     
-    if cmd.startswith('a'):
-      mdPath.unlink()
-    elif cmd.startswith('b'):
-      return ''
-    elif cmd.startswith('c'):
+    # if cmd.startswith('a'):
+    #   mdPath.unlink()
+    # elif cmd.startswith('b'):
+    #   return ''
+    # elif cmd.startswith('c'):
       mdPath = path/f'{book.title}_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.md'
-    if cmd.endswith('r'):
-      rememberCmd = cmd
+    # if cmd.endswith('r'):
+    #   rememberCmd = cmd
   return mdPath
 
 """
