@@ -2,9 +2,6 @@ import bs4
 import base
 import write2file as wf
 from douban_book import Book
-import time
-from urllib.parse import urlparse
-import random
 
 """
 从豆列解析所有图书的信息并写到文档
@@ -27,8 +24,7 @@ def requestDoulieBooks(url):
         title = title.select_one('a')
         if title:
           bookUrl = title.get('href')
-          time.sleep(random.randint(1, 5))
-          book = requestBook(bookUrl, doulieUrl=url)
+          book = requestBook(bookUrl)
           wf.write2Md(base.fileSavePath, book, tag)
     getNextPage(soup)
     
@@ -49,10 +45,9 @@ def getNextPage(soup):
 解析一本图书的信息，比如 
 book = requestBook('https://book.douban.com/subject/34834004/')
 """
-def requestBook(url, doulieUrl = ''):
+def requestBook(url):
   book = Book(url)
-  headers = {'Referer': doulieUrl} if doulieUrl else {}
-  soup = bs4.BeautifulSoup(base.requestUrl(url, headers), 'html.parser')
+  soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')
 
   title = getContent(soup, 'meta[property="og:title"]')
   if title:
