@@ -94,7 +94,11 @@ def requestBook(url):
 
   # 内容简介被包装在多个 p 标签里
   description = ''
+  # 内容简介比较长的情况
   des = soup.select('#link-report > span.all.hidden > div > div > p')
+  if not des:
+    # 只有很短的简介
+    des = soup.select('#link-report > div > div > p')
   if des:
     desp = map(lambda p: p.text, des)
     description = list(desp)

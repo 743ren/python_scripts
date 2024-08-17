@@ -53,7 +53,7 @@ def write2Md(path: Path, book: Book, tag = ''):
     if book.image:
       f.write(f'![{book.title}|400]({book.image})\n\n')
     if book.description:
-      f.write(f'## 简介\n')
+      f.write(f'## 简介\n\n')
       for des in book.description:
         f.write(f'{des}\n\n')
     
