@@ -56,8 +56,6 @@ def write2Md(path: Path, book: Book, tag = ''):
       f.write(f'## 简介\n\n')
       for des in book.description:
         f.write(f'{des}\n\n')
-    
-    print(f'{book.title} 写到 markdown 文件成功')
 
 def getFinalPath(path: Path, book: Book):
   # global rememberCmd

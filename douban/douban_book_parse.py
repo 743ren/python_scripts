@@ -3,10 +3,15 @@ import base
 import write2file as wf
 from douban_book import Book
 
+counter = 0
+
 """
 从豆列解析所有图书的信息并写到文档
 """
 def requestDoulieBooks(url):
+  global counter
+  counter = 0
+
   soup = bs4.BeautifulSoup(base.requestUrl(url), 'html.parser')
   tag = ''
   try:
@@ -25,7 +30,12 @@ def requestDoulieBooks(url):
         if title:
           bookUrl = title.get('href')
           book = requestBook(bookUrl)
+
+          counter += 1
+          print(f'---{counter}---')
+          print(f'《{book.title}》获取成功')
           wf.write2Md(base.fileSavePath, book, tag)
+          print(f'《{book.title}》写入文件成功')
     getNextPage(soup)
     
 """获取豆列下一页"""
@@ -103,7 +113,6 @@ def requestBook(url):
     desp = map(lambda p: p.text, des)
     description = list(desp)
     book.description = description
-  print(f'获取图书信息成功 {book.title}')
   return book
 
 def getContent(soup, css):
