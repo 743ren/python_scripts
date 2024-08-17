@@ -42,7 +42,7 @@ def write2Md(path: Path, book: Book, tag = ''):
     else:
       f.write(f'tags: \n')
 
-    f.write(f'状态: []\n')
+    # f.write(f'状态: []\n')
     # f.write(f'来源: \n') EPUB 网络路径或者直接文件地址
 
     # language = getLanguage(book)
