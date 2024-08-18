@@ -81,27 +81,29 @@ def getFinalPath(path: Path, book: Book):
 """
 def getLanguage(book: Book):
   language = ''
-  if book.originTitle:
-    lan = detect(book.originTitle)
-    language = {
-      'en': '英语', 
-		  'fr': '法语', 
-		  'de': '德语', 
-		  'ru': '俄语',
-      'ja': '日语',
-      'ko': '韩语'
-    }.get(lan, '')
-  else:
-    if re.search(r'\[美\]|\[英\]', book.author):
-      language = '英语'
-    elif re.search(r'\[法\]', book.author):
-      language = '法语'
-    elif re.search(r'\[德\]', book.author):
-      language = '德语'
-    elif re.search(r'\[俄\]', book.author):
-      language = '俄语'
-    elif re.search(r'\[日\]', book.author):
-      language = '日语'
-    elif re.search(r'\[韩\]', book.author):
-      language = '韩语'
+  if re.search(r'\[美\]|\[英\]', book.author):
+    language = '英语'
+  elif re.search(r'\[法\]', book.author):
+    language = '法语'
+  elif re.search(r'\[德\]', book.author):
+    language = '德语'
+  elif re.search(r'\[俄\]', book.author):
+    language = '俄语'
+  elif re.search(r'\[日\]', book.author):
+    language = '日语'
+  elif re.search(r'\[韩\]', book.author):
+    language = '韩语'
+  elif book.originTitle:
+    try:
+      lan = detect(book.originTitle) # 防止书名都是数字这种无法找到语言特征的
+      language = {
+        'en': '英语', 
+        'fr': '法语', 
+        'de': '德语', 
+        'ru': '俄语',
+        'ja': '日语',
+        'ko': '韩语'
+      }.get(lan, '')
+    except:
+      pass
   return language  

@@ -2,6 +2,7 @@ import bs4
 import base
 import write2file as wf
 from douban_book import Book
+import re
 
 counter = 0
 
@@ -16,12 +17,14 @@ def requestDoulieBooks(url):
   # 全局的tag不知怎么后来就 None了
   tag = ''
   try:
-    tag = soup.select_one('#content > h1 > span').text
+    tag = soup.select_one('#content > h1 > span').text.strip()
     if tag not in base.exclude_tags:
       if '｜' in tag:
         tag = tag.split('｜')[1].strip().split()[0].strip()
       elif '|' in tag: 
         tag = tag.split('|')[1].strip().split()[0].strip()
+    else:
+      tag = ''
   except:
     pass
   
@@ -108,7 +111,9 @@ def requestBook(url):
     elif '页数' in text:
       pages = str(pl.next_sibling).strip()
       if pages:
-        book.pages = pages
+        pages = re.compile('\d+').search(pages)
+        if pages:
+          book.pages = pages.group()
 
   # 内容简介被包装在多个 p 标签里
   description = ''

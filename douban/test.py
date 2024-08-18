@@ -1,7 +1,6 @@
 import douban_book_parse as db
 import base
 import write2file as wf
-import bs4
 
 # 短简介
 # https://book.douban.com/subject/30400258/
