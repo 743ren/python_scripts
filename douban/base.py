@@ -3,6 +3,7 @@ import pyautogui
 import webbrowser
 from time import sleep
 import pyperclip
+from douban_book import Book
 
 file_save_path = Path.home()/'Documents/Write/Obsidian/图书馆'
 exclude_tags = ['其它', '政法', '社科', '人际', '健康', '艺术', '文学', '临时']
@@ -23,3 +24,9 @@ def get_html_text(url):
     pyautogui.hotkey('command', 'w')  # 关闭源代码窗口
     pyautogui.hotkey('command', 'w')  # 关闭网页窗口
     return text
+
+
+def load_one_book(url):
+    book = Book(url)
+    book.init_with_html(get_html_text(url))
+    return book
