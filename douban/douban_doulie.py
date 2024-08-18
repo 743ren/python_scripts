@@ -39,7 +39,7 @@ class Doulie:
                         book_url = title.get('href')
                         book = base.load_one_book(book_url)
                         self.counter += 1
-                        print(f'---{self.counter}---')
+                        print(f'---{self.name} {self.counter}---')
                         print(f'《{book.title}》获取成功')
                         dir_name = self.tag if self.tag else self.name
                         wf.write_2_md(base.file_save_path/dir_name, book, self.tag)
